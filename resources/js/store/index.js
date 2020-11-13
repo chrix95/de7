@@ -10,6 +10,7 @@ export default new Vuex.Store({
         userRole: null,
         isUserLoggedIn: false,
         loading: false,
+        cart: []
     },
     mutations: {
         SET_USER_DATA(state, credentials) {
@@ -18,25 +19,46 @@ export default new Vuex.Store({
             state.userRole = credentials.user.role
             sessionStorage.setItem("setResponse", JSON.stringify(credentials))
             state.isUserLoggedIn = true
-            // axios.defaults.headers.common["Authorization"] = `Bearer ${credentials.data.token}`
         },
         RELOAD_USER_DATA(state, credentials) {
             state.token = credentials.token
             state.user = credentials.user
             state.userRole = credentials.user.role
             state.isUserLoggedIn = true
-            // axios.defaults.headers.common["Authorization"] = `Bearer ${credentials.token}`
         },
         CLEAR_USER_DATA(state) {
             state.token = null
             state.user = null
             state.userRole = null
             state.isUserLoggedIn = false
-            // delete axios.defaults.headers.common["Authorization"];
+            state.cart = []
             sessionStorage.removeItem("setResponse")
+            sessionStorage.removeItem("cartItem")
         },
         SET_LOADING_STATE(state, value) {
             state.loading = value
+        },
+        RELOAD_CART_ITEMS(state, items) {
+            state.cart = items
+        },
+        REMOVE_CART_ITEM(state, itemId) {
+            state.cart = state.cart.filter(c => c.id !== itemId)
+            sessionStorage.setItem('cartItem', JSON.stringify(state.cart))
+        },
+        UPDATE_CART_ITEM(state, item) {
+            let existItem = state.cart.find(c => c.id == item.id)
+            existItem.quantity = item.qty
+            sessionStorage.setItem('cartItem', JSON.stringify(state.cart))
+        },
+        SET_CART_ITEM(state, item) {
+            var cartItem =  state.cart.find(c => c.id == item.id)
+            if (cartItem) {
+                cartItem.quantity = cartItem.quantity + 1
+            } else {
+                item.quantity = 1
+                state.cart = [...state.cart, item]
+            }
+            sessionStorage.setItem('cartItem', JSON.stringify(state.cart))
         }
     },
     actions: {
@@ -51,6 +73,18 @@ export default new Vuex.Store({
         },
         loading({ commit }, value) {
             commit("SET_LOADING_STATE", value)
+        },
+        addToCart({ commit }, item) {
+            commit("SET_CART_ITEM", item)
+        },
+        updateCart({ commit }, item) {
+            commit("UPDATE_CART_ITEM", item)
+        },
+        removeCart({ commit }, itemId) {
+            commit("REMOVE_CART_ITEM", itemId)
+        },
+        reloadCartItems({ commit }, items) {
+            commit("RELOAD_CART_ITEMS", items)
         }
     },
     getters: {
@@ -64,6 +98,12 @@ export default new Vuex.Store({
             if (state.userRole == 2) {
                 return 'admin.dashboard'
             }
+        },
+        cartCount(state) {
+            return state.cart.length
+        },
+        cartTotal(state) {
+            return state.cart.reduce((acc, item) => acc + Number(item.price) * Number(item.quantity), 0);
         }
     }
 });

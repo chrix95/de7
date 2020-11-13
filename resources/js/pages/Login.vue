@@ -15,7 +15,7 @@
                             type="email"
                             id="email"
                             class="form-control"
-                            placeholder="user@example.com"
+                            placeholder="user@test.com"
                             v-model="user.email"
                             required
                         />

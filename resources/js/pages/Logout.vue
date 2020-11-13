@@ -7,7 +7,15 @@ import AuthenticationService from "../services/AuthenticationService"
 export default {
     name: 'Logout',
     mounted() {
-        this.logout()
+        if (this.$store.getters.cartCount != 0) {
+            if (confirm(`You have ${this.$store.getters.cartCount} item(s) in your cart. Do you want to proceed?`)) {
+                this.logout()
+            } else {
+                this.$router.go(-1)
+            }
+        } else {
+            this.logout()
+        }
     },
     methods: {
         logout() {
