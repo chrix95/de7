@@ -1,12 +1,12 @@
 <template>
     <div class="container">
         <div class="card card-default">
-            <div class="card-header">Cart Items</div>
+            <div class="card-header">Cart Item(s)</div>
             <div class="card-body">
                 <div class="row"  v-if="$store.getters.cartCount > 0">
                     <div class="col-md-12">
                         <div class="table-responsive">
-                            <table class="table table-borderless">
+                            <table class="table table-borderless table-hover">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -14,6 +14,7 @@
                                         <th scope="col">Quantity</th>
                                         <th scope="col">Price</th>
                                         <th scope="col">Total</th>
+                                        <th scope="col">[Action]</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -42,7 +43,11 @@
                         </div>
                     </div>
                     <div class="col-md-12 text-right">
-                        <button class="btn btn-md btn-warning" type="button">Proceed to Checkout</button>
+                        <router-link :to="{ name: 'checkout' }">
+                            <button class="btn btn-md btn-warning" :disabled="$store.getters.cartTotal == 0">
+                                Proceed to Checkout
+                            </button>
+                        </router-link>
                     </div>
                 </div>
                 <div class="row" v-else>

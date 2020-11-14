@@ -52,11 +52,12 @@ export default new Vuex.Store({
         },
         SET_CART_ITEM(state, item) {
             var cartItem =  state.cart.find(c => c.id == item.id)
+            let newItem = item
             if (cartItem) {
                 cartItem.quantity = cartItem.quantity + 1
             } else {
-                item.quantity = 1
-                state.cart = [...state.cart, item]
+                newItem.quantity = 1
+                state.cart = [...state.cart, newItem]
             }
             sessionStorage.setItem('cartItem', JSON.stringify(state.cart))
         }

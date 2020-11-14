@@ -40,7 +40,7 @@ Route::prefix('auth')->group(function () {
         });
         // customer allowed route
         Route::group(['middleware' => 'isCustomer'], function() {
-
+            Route::post('checkout/verify', 'InventoryController@verifyPayment');
         });
         // delivery allowed route
         Route::group(['middleware' => 'isDelivery'], function() {

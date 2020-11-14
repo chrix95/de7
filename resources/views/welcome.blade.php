@@ -14,5 +14,6 @@
         <div id="app">
             <index></index>
         </div>
+        <script src="https://js.paystack.co/v1/inline.js" rel="preload"></script>
     </body>
 </html>

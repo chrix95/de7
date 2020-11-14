@@ -10,6 +10,7 @@ import NotFound from './pages/NotFound'
 import Dashboard from './pages/user/Dashboard'
 import CategoryGrid from './pages/user/CategoryGrid'
 import Cart from './pages/user/Cart'
+import Checkout from './pages/user/Checkout'
 // Driver Pages
 import DriverDashboard from './pages/driver/Dashboard'
 // Admin Pages
@@ -59,6 +60,15 @@ const routes = [
         path: '/view/cart',
         name: 'cart',
         component: Cart,
+        meta: {
+            requiresAuth: true,
+            role: 0
+        }
+    },
+    {
+        path: '/checkout',
+        name: 'checkout',
+        component: Checkout,
         meta: {
             requiresAuth: true,
             role: 0
