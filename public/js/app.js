@@ -43224,7 +43224,7 @@ var render = function() {
                             on: {
                               click: function($event) {
                                 $event.preventDefault()
-                                return _vm.verifyTransaction()
+                                return _vm.payWithCard()
                               }
                             }
                           },
@@ -61861,6 +61861,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
       });
       sessionStorage.setItem('cartItem', JSON.stringify(state.cart));
     },
+    CLEAR_CART_ITEMS: function CLEAR_CART_ITEMS(state) {
+      state.cart = [];
+      sessionStorage.removeItem('cartItem');
+    },
     UPDATE_CART_ITEM: function UPDATE_CART_ITEM(state, item) {
       var existItem = state.cart.find(function (c) {
         return c.id == item.id;
@@ -61916,6 +61920,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
     reloadCartItems: function reloadCartItems(_ref8, items) {
       var commit = _ref8.commit;
       commit("RELOAD_CART_ITEMS", items);
+    },
+    clearCartItems: function clearCartItems(_ref9) {
+      var commit = _ref9.commit;
+      commit("CLEAR_CART_ITEMS");
     }
   },
   getters: {

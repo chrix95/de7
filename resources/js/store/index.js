@@ -45,6 +45,10 @@ export default new Vuex.Store({
             state.cart = state.cart.filter(c => c.id !== itemId)
             sessionStorage.setItem('cartItem', JSON.stringify(state.cart))
         },
+        CLEAR_CART_ITEMS(state) {
+            state.cart = []
+            sessionStorage.removeItem('cartItem')
+        },
         UPDATE_CART_ITEM(state, item) {
             let existItem = state.cart.find(c => c.id == item.id)
             existItem.quantity = item.qty
@@ -86,6 +90,9 @@ export default new Vuex.Store({
         },
         reloadCartItems({ commit }, items) {
             commit("RELOAD_CART_ITEMS", items)
+        },
+        clearCartItems({ commit }) {
+            commit("CLEAR_CART_ITEMS")
         }
     },
     getters: {

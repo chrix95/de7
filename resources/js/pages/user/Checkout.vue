@@ -66,7 +66,7 @@
                                     <hr>
                                     <tr>
                                         <td scope="row">
-                                            <button class="btn btn-md btn-warning btn-block" @click.prevent="verifyTransaction()" :disabled="!checkout || loading || orderCompleted">{{ !loading ? 'Checkout' : 'Please wait...' }}</button>
+                                            <button class="btn btn-md btn-warning btn-block" @click.prevent="payWithCard()" :disabled="!checkout || loading || orderCompleted">{{ !loading ? 'Checkout' : 'Please wait...' }}</button>
                                         </td>
                                     </tr>
                                 </tbody>
