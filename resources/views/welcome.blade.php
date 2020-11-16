@@ -14,6 +14,6 @@
         <div id="app">
             <index></index>
         </div>
-        <script src="https://js.paystack.co/v1/inline.js" rel="preload"></script>
+        <script src="{{ asset('assets/js/inline.js') }}" rel="preload"></script>
     </body>
 </html>

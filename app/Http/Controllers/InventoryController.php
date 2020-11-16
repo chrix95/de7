@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
 
 class InventoryController extends Controller
 {
-    public function getInventories() {
+    public function getInventories(Request $request) {
         try {
             // get all the inventory available and return success
             $inventory = Inventory::all();

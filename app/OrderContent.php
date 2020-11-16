@@ -8,7 +8,7 @@ class OrderContent extends Model
 {
     protected $fillable = ['order_reference', 'product_name', 'product_quantity', 'product_price', 'total', 'categoryId', 'productId'];
 
-    protected $hidden = [];
+    protected $hidden = ['created_at', 'updated_at'];
 
     public function order() {
         return $this->belongsTo(Order::class, 'order_reference', 'order_reference');

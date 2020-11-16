@@ -37,6 +37,10 @@ Route::prefix('auth')->group(function () {
             Route::post('inventories', 'InventoryController@createInventory');
             Route::put('inventories', 'InventoryController@updateInventory');
             Route::delete('inventories', 'InventoryController@deleteInventory');
+            // Order routes
+            Route::get('orders', 'OrderController@getOrders');
+            Route::get('order/{orderRef}', 'OrderController@getOrder');
+            Route::put('order/status', 'OrderController@saveStatus');
         });
         // customer allowed route
         Route::group(['middleware' => 'isCustomer'], function() {

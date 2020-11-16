@@ -57,6 +57,11 @@ export default {
                     role: 2
                 },
                 {
+                    name: 'admin.orders',
+                    description: 'Order Managament',
+                    role: 2
+                },
+                {
                     name: 'logout',
                     description: 'Logout',
                     role: null

@@ -1,4 +1,5 @@
 import VueRouter from 'vue-router'
+import store from "./store";
 
 // Import Pages
 import Home from './pages/Home'
@@ -16,6 +17,8 @@ import DriverDashboard from './pages/driver/Dashboard'
 // Admin Pages
 import AdminDashboard from './pages/admin/Dashboard'
 import AdminInventory from './pages/admin/Inventory'
+import AdminOrders from './pages/admin/Orders'
+import AdminOrder from './pages/admin/Order'
 
 // Routes
 const routes = [
@@ -114,11 +117,31 @@ const routes = [
         }
     },
     {
+        path: '/admin/orders',
+        name: 'admin.orders',
+        component: AdminOrders,
+        meta: {
+            requiresAuth: true,
+            role: 2
+        }
+    },
+    {
+        path: '/admin/orders/:orderRef',
+        name: 'admin.order',
+        component: AdminOrder,
+        props: true,
+        meta: {
+            requiresAuth: true,
+            role: 2
+        }
+    },
+    {
         path: '/logout',
         name: 'logout',
         component: Logout,
         meta: {
-            requiresAuth: false
+            requiresAuth: false,
+            role: null
         }
     },
     {
@@ -126,7 +149,8 @@ const routes = [
         name: 'not.found',
         component: NotFound,
         meta: {
-            requiresAuth: false
+            requiresAuth: false,
+            role: null
         }
     }
 ]
@@ -134,5 +158,21 @@ const router = new VueRouter({
     history: true,
     mode: 'history',
     routes,
+    store
 })
+
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth) && store.state.isUserLoggedIn == null) {
+        next("/login");
+    } else {
+        if (to.matched.some(record => record.meta.role == store.state.userRole) || to.matched.some(record => record.meta.role == null)) {
+            next();
+        } else {
+            router.push({
+                name: store.getters.dashboard
+            });
+        }
+    }
+});
+
 export default router
