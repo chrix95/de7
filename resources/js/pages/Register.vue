@@ -19,6 +19,21 @@
                             'has-error': has_error
                         }"
                     >
+                        <label for="name">Name</label>
+                        <input
+                            type="name"
+                            id="name"
+                            class="form-control"
+                            placeholder="John Doe"
+                            v-model="payload.name"
+                        />
+                    </div>
+                    <div
+                        class="form-group"
+                        v-bind:class="{
+                            'has-error': has_error
+                        }"
+                    >
                         <label for="email">E-mail</label>
                         <input
                             type="email"
@@ -125,9 +140,11 @@ export default {
                         .catch((err) => {
                             this.$store.dispatch("loading", false)
                             if (err.response === undefined) {
-                                this.respondAlert("Oops! took long to get a response", 'error', 'Server Error')
+                                this.has_error = true
+                                this.error_message = "Oops! took long to get a response"
                             } else {
-                                this.respondAlert(err.response.data.message, 'error', err.response.statusText)
+                                this.has_error = true
+                                this.error_message = err.response.data.message
                             }
                         })
                 } else {
@@ -136,7 +153,7 @@ export default {
                 }
             }
         },
-        validateLogin() {
+        validateRegister() {
             if (this.payload.name) {
                 if (this.payload.phone && this.payload.phone.length === 11) {
                     if (this.payload.password) {
