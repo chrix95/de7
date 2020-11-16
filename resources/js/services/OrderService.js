@@ -9,5 +9,11 @@ export default {
     },
     saveStatus(credentials) {
         return Api().put("auth/order/status", credentials);
+    },
+    driverOrders() {
+        return Api().put("auth/driver/orders");
+    },
+    updateDelivered(credentials) {
+        return Api().put("auth/driver/order/status", credentials);
     }
 };

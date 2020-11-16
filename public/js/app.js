@@ -3395,7 +3395,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3626,6 +3625,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _services_OrderService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/OrderService */ "./resources/js/services/OrderService.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -3636,12 +3643,143 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {//
+    return {
+      orders: [],
+      hasError: false,
+      error_message: ''
     };
   },
-  components: {//
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])(['loading'])),
+  mounted: function mounted() {
+    this.getOrders();
+  },
+  methods: {
+    getOrders: function getOrders() {
+      var _this = this;
+
+      this.$store.dispatch("loading", true);
+      _services_OrderService__WEBPACK_IMPORTED_MODULE_1__["default"].driverOrders().then(function (result) {
+        if (result.data.status) {
+          _this.orders = result.data.data;
+          _this.hasError = false;
+        }
+
+        _this.$store.dispatch("loading", false);
+      })["catch"](function (err) {
+        _this.$store.dispatch("loading", false);
+
+        if (err.response.status === 401) {
+          _this.$store.dispatch("logout");
+
+          _this.$router.push({
+            name: 'login'
+          });
+        }
+
+        if (err.response === undefined) {
+          _this.hasError = true;
+          _this.error_message = "Oops! took long to get a response";
+        } else {
+          _this.hasError = true;
+          _this.error_message = err.response.data.message;
+        }
+      });
+    },
+    markDelivered: function markDelivered(ref) {
+      var _this2 = this;
+
+      this.$store.dispatch("loading", true);
+      _services_OrderService__WEBPACK_IMPORTED_MODULE_1__["default"].updateDelivered({
+        orderRef: ref
+      }).then(function (result) {
+        if (result.data.status) {
+          _this2.getOrders();
+        }
+
+        _this2.$store.dispatch("loading", false);
+      })["catch"](function (err) {
+        _this2.$store.dispatch("loading", false);
+
+        if (err.response.status === 401) {
+          _this2.$store.dispatch("logout");
+
+          _this2.$router.push({
+            name: 'login'
+          });
+        }
+
+        if (err.response === undefined) {
+          _this2.hasError = true;
+          _this2.error_message = "Oops! took long to get a response";
+        } else {
+          _this2.hasError = true;
+          _this2.error_message = err.response.data.message;
+        }
+      });
+    }
   }
 });
 
@@ -42039,28 +42177,12 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "card card-default" }, [
-      _c("div", { staticClass: "card-header" }, [
-        _c("strong", [_vm._v("Order Management")]),
-        _vm._v(" "),
-        _c(
-          "span",
-          {
-            staticClass: "btn btn-warning btn-sm",
-            on: {
-              click: function($event) {
-                $event.preventDefault()
-                return _vm.$router.go(-1)
-              }
-            }
-          },
-          [_vm._v("Back to orders")]
-        )
-      ]),
+      _vm._m(0),
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
         !_vm.loading && _vm.order.order_reference
           ? _c("div", { staticClass: "row" }, [
-              _vm._m(0),
+              _vm._m(1),
               _vm._v(" "),
               _vm.hasError
                 ? _c("div", { staticClass: "col-md-12" }, [
@@ -42098,6 +42220,7 @@ var render = function() {
                       ],
                       staticClass: "form-control",
                       staticStyle: { width: "20%" },
+                      attrs: { disabled: _vm.order.status == "delivered" },
                       on: {
                         change: [
                           function($event) {
@@ -42179,7 +42302,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-md-3" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _vm._m(1),
+                  _vm._m(2),
                   _vm._v(" "),
                   _c("input", {
                     staticClass: "form-control",
@@ -42191,7 +42314,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-md-3" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _vm._m(2),
+                  _vm._m(3),
                   _vm._v(" "),
                   _c("input", {
                     staticClass: "form-control",
@@ -42203,7 +42326,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-md-3" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _vm._m(3),
+                  _vm._m(4),
                   _vm._v(" "),
                   _c("input", {
                     staticClass: "form-control",
@@ -42215,7 +42338,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-md-3" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _vm._m(4),
+                  _vm._m(5),
                   _vm._v(" "),
                   _c("input", {
                     staticClass: "form-control",
@@ -42231,7 +42354,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-md-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _vm._m(5),
+                  _vm._m(6),
                   _vm._v(" "),
                   _c("input", {
                     staticClass: "form-control",
@@ -42243,7 +42366,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-md-3" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _vm._m(6),
+                  _vm._m(7),
                   _vm._v(" "),
                   _c("input", {
                     staticClass: "form-control",
@@ -42257,7 +42380,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-md-3" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _vm._m(7),
+                  _vm._m(8),
                   _vm._v(" "),
                   _c("input", {
                     staticClass: "form-control",
@@ -42273,7 +42396,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-md-3" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _vm._m(8),
+                  _vm._m(9),
                   _vm._v(" "),
                   _vm.order.status == "pending"
                     ? _c("div", { staticClass: "alert alert-info" }, [
@@ -42296,7 +42419,7 @@ var render = function() {
               _c("div", { staticClass: "col-md-12" }, [
                 _c("hr"),
                 _vm._v(" "),
-                _vm._m(9),
+                _vm._m(10),
                 _vm._v(" "),
                 _c("hr"),
                 _vm._v(" "),
@@ -42305,7 +42428,7 @@ var render = function() {
                     "table",
                     { staticClass: "table table-borderless table-hover" },
                     [
-                      _vm._m(10),
+                      _vm._m(11),
                       _vm._v(" "),
                       _c(
                         "tbody",
@@ -42355,7 +42478,7 @@ var render = function() {
                           }),
                           _vm._v(" "),
                           _c("tr", [
-                            _vm._m(11),
+                            _vm._m(12),
                             _vm._v(" "),
                             _c(
                               "td",
@@ -42397,6 +42520,14 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _c("strong", [_vm._v("Order Management")])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -42680,20 +42811,126 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "card card-default" }, [
+      _c("div", { staticClass: "card-header" }, [_vm._v("Driver Dashboard")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body" }, [
+        _c("div", { staticClass: "row" }, [
+          !_vm.loading && _vm.orders.length > 0
+            ? _c("div", { staticClass: "col-md-12" }, [
+                _c("div", { staticClass: "table-responsive" }, [
+                  _c(
+                    "table",
+                    { staticClass: "table table-borderless table-hover" },
+                    [
+                      _vm._m(0),
+                      _vm._v(" "),
+                      _c(
+                        "tbody",
+                        _vm._l(_vm.orders, function(item, index) {
+                          return _c("tr", { key: index }, [
+                            _c("th", { attrs: { scope: "row" } }, [
+                              _vm._v(_vm._s(index + 1))
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(item.name))]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(item.email))]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(item.phone))]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(item.order_reference))]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(item.amount_paid))]),
+                            _vm._v(" "),
+                            item.status == "intransit"
+                              ? _c("td", [
+                                  _c(
+                                    "span",
+                                    { staticClass: "alert alert-warning" },
+                                    [_vm._v("In-transit")]
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            item.status == "delivered"
+                              ? _c("td", [
+                                  _c(
+                                    "span",
+                                    { staticClass: "alert alert-success" },
+                                    [_vm._v("Delivered")]
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            item.status !== "delivered"
+                              ? _c("td", [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-info btn-sm",
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          return _vm.markDelivered(
+                                            item.order_reference
+                                          )
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                            Delivered\n                                        "
+                                      )
+                                    ]
+                                  )
+                                ])
+                              : _vm._e()
+                          ])
+                        }),
+                        0
+                      )
+                    ]
+                  )
+                ])
+              ])
+            : _c("div", { staticClass: "col-md-12" }, [
+                _c("h4", { staticClass: "text-center" }, [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(_vm.loading ? "Loading..." : "No record found") +
+                      "\n                    "
+                  )
+                ])
+              ])
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "card card-default" }, [
-        _c("div", { staticClass: "card-header" }, [_vm._v("Driver Dashboard")]),
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("#")]),
         _vm._v(" "),
-        _c("div", { staticClass: "card-body" }, [
-          _vm._v("\n            Desevens\n        ")
-        ])
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Email")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Phone")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Order Reference")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Total Amount")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Status")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("[Action]")])
       ])
     ])
   }
@@ -61766,6 +62003,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   saveStatus: function saveStatus(credentials) {
     return Object(_Api__WEBPACK_IMPORTED_MODULE_0__["default"])().put("auth/order/status", credentials);
+  },
+  driverOrders: function driverOrders() {
+    return Object(_Api__WEBPACK_IMPORTED_MODULE_0__["default"])().put("auth/driver/orders");
+  },
+  updateDelivered: function updateDelivered(credentials) {
+    return Object(_Api__WEBPACK_IMPORTED_MODULE_0__["default"])().put("auth/driver/order/status", credentials);
   }
 });
 

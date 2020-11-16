@@ -95,4 +95,61 @@ class OrderController extends Controller
             ], 500);
         }
     }
+    public function driverOrders(Request $request) {
+        try {
+            // get all the orders available and return success
+            $orders = Order::where('status', 'intransit')->orWhere('status', 'delivered')->get();
+            return response()->json([
+                'status' => true,
+                'message' => 'Successful',
+                'data' => $orders
+            ], 200);
+        } catch (\Throwable $th) {
+            // throw an error to the log and respond properly 
+            \Log::info($th);
+            return response()->json([
+                'status' => false,
+                'message' => 'Internal Server Error'
+            ], 500);
+        }
+    }
+    public function updateDelivered(Request $request) {
+        $data = array(
+            'orderRef' => $request->orderRef
+        );
+        // Validate the payload sent
+        $validator = Validator::make($data, [
+            'orderRef' => 'required|string'
+        ]);
+        if ($validator->fails()) {
+            // Return error message on failed Validation
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()->first(),
+            ], 422);
+        }
+        try {
+            // get a single orders using order reference and return success
+            $order = Order::where('order_reference', $data['orderRef'])->first();
+            if (!$order) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Order with reference ' . $data['orderRef'] . ' not found'
+                ]);
+            }
+            $order->status = 'delivered';
+            $order->save();
+            return response()->json([
+                'status' => true,
+                'message' => 'Successful'
+            ], 200);
+        } catch (\Throwable $th) {
+            // throw an error to the log and respond properly 
+            \Log::info($th);
+            return response()->json([
+                'status' => false,
+                'message' => 'Internal Server Error'
+            ], 500);
+        }
+    }
 }

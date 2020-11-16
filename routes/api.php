@@ -48,7 +48,8 @@ Route::prefix('auth')->group(function () {
         });
         // delivery allowed route
         Route::group(['middleware' => 'isDelivery'], function() {
-
+            Route::put('driver/orders', 'OrderController@driverOrders');
+            Route::put('driver/order/status', 'OrderController@updateDelivered');
         });
         Route::post('logout', 'AuthController@logout');
     });

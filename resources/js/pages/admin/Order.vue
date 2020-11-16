@@ -3,7 +3,6 @@
         <div class="card card-default">
             <div class="card-header">
                 <strong>Order Management</strong>
-                <span class="btn btn-warning btn-sm" @click.prevent="$router.go(-1)">Back to orders</span>
             </div>
             <div class="card-body">
                 <div class="row" v-if="!loading && order.order_reference">
@@ -21,7 +20,7 @@
                     </div>
                     <div class="col-md-12 mbt-15" style="float: right;">
                         <label for="status">Update status</label>
-                        <select v-model="order.status" style="width: 20%" class="form-control" @change.prevent="updateStatus()">
+                        <select v-model="order.status" style="width: 20%" class="form-control" :disabled="order.status == 'delivered'" @change.prevent="updateStatus()">
                             <option value="pending" :selected="order.status == 'pending' ? 'selected' : '' ">New</option>
                             <option value="intransit" :selected="order.status == 'intransit' ? 'selected' : '' ">In-transit</option>
                             <option value="delivered" :selected="order.status == 'delivered' ? 'selected' : '' ">Delivered</option>
